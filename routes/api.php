@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,19 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', [UserController::class, 'thisUser']);
 
-Route::get('posts', function() {
-    $posts= DB::table('posts')
-        ->select(DB::raw("
-            posts.id AS id,
-            posts.title AS title,
-            posts.category AS category,
-            posts.author AS author
-        "))
-        ->orderBy('posts.category');
-
-    return response()->json($posts->get(), 200);
-});
+Route::get('posts', [PostController::class, 'api']);
